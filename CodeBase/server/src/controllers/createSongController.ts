@@ -21,7 +21,16 @@ const createSong = async (req: Request, res: Response) => {
 
 const listSong = async (req: Request, res: Response) => {
   try {
-    const getSong = await Song.find();
+    const filterByGenre = (req.query.selectedGenre as string) || "";
+
+    let query: any = {};
+
+    if (filterByGenre) {
+      const searchRegex = new RegExp(filterByGenre, "i");
+      query.genre = searchRegex;
+    }
+
+    const getSong = await Song.find(query);
 
     res.status(200).json(getSong);
 
@@ -31,6 +40,63 @@ const listSong = async (req: Request, res: Response) => {
 
     res.status(500).json({
       message: "Error getting songs",
+    });
+  }
+};
+
+const songStatistics = async (req: Request, res: Response) => {
+  try {
+    const totalSongs = await Song.countDocuments({});
+    const totalAlbums = (await Song.distinct("album")).length;
+    const totalArtists = (await Song.distinct("artist")).length;
+    const totalGenres = (await Song.distinct("genre")).length;
+
+    // console.log(totalSongs, totalAlbums, totalArtists, totalGenres);
+
+    // number of songs in each genre
+    const songsByGenre = await Song.aggregate([
+      { $group: { _id: "$genre", count: { $sum: 1 } } },
+    ]);
+
+    // console.log(songsByGenre);
+
+    // number of songs by each artist
+    const songsByArtist = await Song.aggregate([
+      { $group: { _id: "$artist", count: { $sum: 1 } } },
+      { $project: { artistName: "$_id", songCount: "$count" } },
+    ]);
+
+    // console.log(songsByArtist);
+
+    // Number of songs in each album
+    const songsByAlbum = await Song.aggregate([
+      { $group: { _id: "$album", count: { $sum: 1 } } },
+      { $project: { albumTitle: "$_id", songCount: "$count" } },
+    ]);
+
+    // console.log(songsByAlbum);
+
+    // Combine the results into a single response object
+    const statistics = {
+      totalSongs,
+      totalAlbums,
+      totalArtists,
+      totalGenres,
+      songsByGenre,
+      songsByArtist,
+      songsByAlbum,
+    };
+
+    // console.log(statistics)
+
+    res.status(200).json(statistics);
+
+    //
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Error getting songs statistics",
     });
   }
 };
@@ -96,4 +162,5 @@ export default {
   deleteSong,
   updateSong,
   getSongById,
+  songStatistics,
 };

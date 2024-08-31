@@ -7,6 +7,9 @@ function MainNav() {
         <Link to={"/"} className="hover:border-b-4 hover:border-b-orange-500">
           Home
         </Link>
+        <Link to={"/statistics"} className="hover:border-b-4 hover:border-b-orange-500">
+          Statistics
+        </Link>
       </div>
     </span>
   );

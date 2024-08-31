@@ -1,5 +1,6 @@
 import axiosBase from "@/axiosConfig";
 import { SearchState } from "@/pages/SongPage";
+import { StatisticsResponse } from "@/types";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
@@ -46,9 +47,17 @@ export const useCreateSong = () => {
 };
 
 export const useGetSong = (searchState: SearchState) => {
+  const param = new URLSearchParams();
+
+  param.set("selectedGenre", searchState.selectedGenre.toString());
+
+  console.log(param);
+
   const getSongRequest = async (): Promise<[Song]> => {
     try {
-      const response = await axiosBase.get("/api/song/list");
+      const response = await axiosBase.get(
+        `/api/song/list?${param.toString()}`
+      );
 
       return response.data;
     } catch (error) {
@@ -157,4 +166,29 @@ export const useGetSongById = (id: string) => {
   );
 
   return { song, isLoading };
+};
+
+export const useGetSongStatistics = () => {
+  const getSongStatisticsRequest = async (): Promise<StatisticsResponse> => {
+    try {
+      const response = await axiosBase.get(`/api/song/statistics`);
+
+      return response.data;
+    } catch (error) {
+      // console.log(error);
+
+      throw new Error("Failed to get song's statistics ");
+    }
+  };
+
+  const {
+    data: statistics,
+    isLoading,
+    isSuccess,
+  } = useQuery<StatisticsResponse>(
+    ["getSongStatistics"],
+    getSongStatisticsRequest
+  );
+
+  return { statistics, isLoading, isSuccess };
 };

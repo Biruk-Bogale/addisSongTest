@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
 import SongPage from "./pages/SongPage";
 import SongUpdatePage from "./pages/SongUpdatePage";
+import StatisticsPage from "./pages/StatisticsPage";
 
 function AppRoutes() {
   return (
@@ -14,11 +15,12 @@ function AppRoutes() {
           </Layout>
         }
       />
+
       <Route
-        path="/"
+        path="/statistics"
         element={
           <Layout>
-            <span>;likuj</span>
+           <StatisticsPage/>
           </Layout>
         }
       />

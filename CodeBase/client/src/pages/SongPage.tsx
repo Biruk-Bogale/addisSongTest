@@ -5,18 +5,22 @@ import {
   useGetSong,
 } from "@/apiService/SongApiService";
 import CreateSong from "@/components/CreateSong";
+import GenreFilter from "@/components/GenreFilter";
 import ListSong from "@/components/ListSong";
 import ProgressBar from "@/components/ProgressBar";
 import { useState } from "react";
 
 export type SearchState = {
   listState: number;
+  selectedGenre: string[];
 };
 
 function SongPage() {
   const [searchState, setSearchState] = useState<SearchState>({
     listState: 1,
+    selectedGenre: [],
   });
+  const [isExpanded, setIsExapanded] = useState<boolean>(false);
 
   const {
     createSong,
@@ -47,14 +51,31 @@ function SongPage() {
     }));
   };
 
+  const setSelectedGenre = (selectedGenre: string[]) => {
+    setSearchState((prevState) => ({
+      ...prevState,
+      selectedGenre,
+      listState: prevState.listState + 1,
+    }));
+  };
+
   return (
     <>
-      <div className="grid md:grid-cols-[1fr_4fr_2fr]  gap-5">
+      <div className="grid md:grid-cols-[200px_4fr_2fr]  gap-5">
         <ProgressBar
           isLoading={isCreateSongLoading || isGetLoading || isDeleteLoading}
         />
 
-        <div>filter by genre</div>
+        <div>
+          <GenreFilter
+            selectedGener={searchState.selectedGenre}
+            onChange={setSelectedGenre}
+            isExpanded={isExpanded}
+            onExpandedClick={() =>
+              setIsExapanded((prevIsExpanded) => !prevIsExpanded)
+            }
+          />
+        </div>
 
         <div className="overflow-x-auto">
           {songs ? (

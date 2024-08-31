@@ -1,6 +1,6 @@
 import { useGetSongById, useUpdateSong } from "@/apiService/SongApiService";
 import ProgressBar from "@/components/ProgressBar";
-import UpdateSong from "@/components/updateSong";
+import UpdateSong from "@/components/UpdateSong";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
