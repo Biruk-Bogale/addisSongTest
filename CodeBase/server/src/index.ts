@@ -17,6 +17,12 @@ app.use(express.json());
 // Enables Cross-Origin Resource Sharing
 app.use(cors());
 
+app.get("/health", (req: Request, res: Response) => {
+  res.send({
+    message: "Health OK!",
+  });
+});
+
 // use songRoutes for any requests starting with '/api/song'
 app.use("/api/song", songRoutes);
 

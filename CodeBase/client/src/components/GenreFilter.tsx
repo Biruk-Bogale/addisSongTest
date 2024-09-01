@@ -22,7 +22,7 @@ function GenreFilter({
     const isChecked = event.target.checked;
 
     const newGenreList = isChecked
-      ? [...selectedGener, clickedGenre]
+      ? [clickedGenre]
       : selectedGener.filter((genre) => genre !== clickedGenre);
 
     onChange(newGenreList);
@@ -43,33 +43,35 @@ function GenreFilter({
       </div>
 
       <div className="space-y-2 flex flex-col">
-        {generList.slice(0, isExpanded ? generList.length : 5).map((genre,i) => {
-          const isSelected = selectedGener?.includes(genre);
+        {generList
+          .slice(0, isExpanded ? generList.length : 5)
+          .map((genre, i) => {
+            const isSelected = selectedGener?.includes(genre);
 
-          return (
-            <div key={i} className="flex">
-              <input
-                id={`genre_${genre}`}
-                type="checkbox"
-                className="hidden"
-                value={genre}
-                checked={isSelected}
-                onChange={handleGenreChange}
-              />
-              <Label
-                htmlFor={`genre_${genre}`}
-                className={`flex flex-1 items-center cursor-pointer text-sm rounded-full px-4 py-2 font-semibold ${
-                  isSelected
-                    ? "border border-green-600 text-green-600"
-                    : "border border-slate-300"
-                } `}
-              >
-                {isSelected && <Check size={20} strokeWidth={3} />}
-                {genre}
-              </Label>
-            </div>
-          );
-        })}
+            return (
+              <div key={i} className="flex">
+                <input
+                  id={`genre_${genre}`}
+                  type="checkbox"
+                  className="hidden"
+                  value={genre}
+                  checked={isSelected}
+                  onChange={handleGenreChange}
+                />
+                <Label
+                  htmlFor={`genre_${genre}`}
+                  className={`flex flex-1 items-center cursor-pointer text-sm rounded-full px-4 py-2 font-semibold ${
+                    isSelected
+                      ? "border border-green-600 text-green-600"
+                      : "border border-slate-300"
+                  } `}
+                >
+                  {isSelected && <Check size={20} strokeWidth={3} />}
+                  {genre}
+                </Label>
+              </div>
+            );
+          })}
         <Button
           onClick={onExpandedClick}
           variant="link"

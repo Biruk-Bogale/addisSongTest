@@ -30,6 +30,8 @@ const listSong = async (req: Request, res: Response) => {
       query.genre = searchRegex;
     }
 
+    console.log(query);
+
     const getSong = await Song.find(query);
 
     res.status(200).json(getSong);

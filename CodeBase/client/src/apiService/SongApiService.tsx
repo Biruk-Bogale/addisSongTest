@@ -51,8 +51,6 @@ export const useGetSong = (searchState: SearchState) => {
 
   param.set("selectedGenre", searchState.selectedGenre.toString());
 
-  console.log(param);
-
   const getSongRequest = async (): Promise<[Song]> => {
     try {
       const response = await axiosBase.get(

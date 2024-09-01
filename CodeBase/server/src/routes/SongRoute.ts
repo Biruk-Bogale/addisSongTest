@@ -1,18 +1,18 @@
 import express from "express";
-import createSongController from "../controllers/createSongController";
+import SongController from "../controllers/SongController";
 
 const router = express.Router();
 
-router.post("/create", createSongController.createSong);
+router.post("/create", SongController.createSong);
 
-router.get("/list", createSongController.listSong);
+router.get("/list", SongController.listSong);
 
-router.get("/statistics", createSongController.songStatistics);
+router.get("/statistics", SongController.songStatistics);
 
-router.delete("/delete/:id", createSongController.deleteSong);
+router.delete("/delete/:id", SongController.deleteSong);
 
-router.put("/update/:id", createSongController.updateSong);
+router.put("/update/:id", SongController.updateSong);
 
-router.get("/get/:id", createSongController.getSongById);
+router.get("/get/:id", SongController.getSongById);
 
 export default router;
